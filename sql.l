@@ -1,6 +1,7 @@
 %{
     #include<string.h>
     #include"sql.tab.h"
+    int line =1;
 %}
 CREATE CREATE|create
 SHOW SHOW|show
@@ -67,3 +68,9 @@ STRING '.*'
 ">"  { return LESS_THAN; }
 "="  { return EQUAL; }
 "!"  { return EXCLA; }
+
+\n   { line++; }
+{STRING} {*(yytext+strlen(yytext)-1) = '\0'; yylval.chval = strdup(yytext+1);  return STRING;}
+[ \t]+                {;}//忽视空白
+"//".*                {;}//跳过注释
+%%
