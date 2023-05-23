@@ -62,7 +62,7 @@ STRING '.*'
 ")"  { return RIGHT_PARENTHESIS; }
 ";"  { return SEMICOLON; }
 ","  { return COMMA; }
-"*"  { return ASTERISK; }
+"*"  { return STAR; }
 "."  { return DOT; }
 "<"  { return GREATER_THAN; }
 ">"  { return LESS_THAN; }
