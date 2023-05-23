@@ -1,10 +1,17 @@
 %{
-    #include<stdio.h>
+    
     int yylex(void);
     void yyerror(char *s){
         printf("ERROR '%s'\n",s);
     }
+    #include<stdio.h>
+    
 %}
+%union{
+    int intval;
+    char* charval;
+    int typeval;
+}
 %token CREATE
 %token DATABASE
 %token SHOW
@@ -68,8 +75,7 @@ field_definition: field_type
 field_type: field type
           ;
 
-field:ID
-     ;
+
 
 type: CHAR LEFT_PARENTHESIS NUMBER RIGHT_PARENTHESIS
     | INT
@@ -113,8 +119,45 @@ comp_right: table_field
           ;
 
 insertSQL: INSERT INTO table VALUES LEFT_PARENTHESIS values RIGHT_PARENTHESIS SEMICOLON
-         | INSERT INTO table LEFT_PARENTHESIS field RIGHT_PARENTHESIS VALUES LEFT_PARENTHESIS values RIGHT_PARENTHESIS SEMICOLON
+         | INSERT INTO table LEFT_PARENTHESIS fields RIGHT_PARENTHESIS VALUES LEFT_PARENTHESIS values RIGHT_PARENTHESIS SEMICOLON
          ; 
+
+values: value
+      | value COMMA values
+      ;
+
+value: STRING
+     | NUMBER
+     ;
+
+fields: field
+      | field COMMA fields
+      ;
+
+field: ID
+     ;
+
+deleteSQL: DELETE FROM table SEMICOLON
+         | DELETE FROM table WHERE conditions SEMICOLON
+         ;
+
+updateSQL: UPDATE table SET updates WHERE conditions SEMICOLON
+         ;
+
+updates: update
+         | update COMMA updates
+         ;
+
+update: comp_left EQUAL comp_right
+      ;
+
+DBSQL: CREATE DATABASE database SEMICOLON
+     | DROP DATABASE database SEMICOLON
+     | DROP TABLE table SEMICOLON
+     | USE database SEMICOLON
+     ;
+database: ID
+        ;
 %%
 int main(){
     printf("\nSQL>");

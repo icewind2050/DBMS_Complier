@@ -1,8 +1,11 @@
 %{
+    int yywrap(void);
+    int yylex(void);
     #include<string.h>
-    #include"sql.tab.h"
+    #include"sql.tab.hh"
     int line =1;
 %}
+
 CREATE CREATE|create
 SHOW SHOW|show
 DROP DROP|drop
@@ -74,3 +77,7 @@ STRING '.*'
 [ \t]+                {;}//忽视空白
 "//".*                {;}//跳过注释
 %%
+
+int yywrap(void){
+    return 1;
+}
