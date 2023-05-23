@@ -5,12 +5,16 @@
         printf("ERROR '%s'\n",s);
     }
     #include<stdio.h>
+    #include"include/DBCORE.hh"
+    #include"include/DBSHELL.hh"
     
 %}
 %union{
     int intval;
     char* charval;
     int typeval;
+    
+
 }
 %token CREATE
 %token DATABASE
