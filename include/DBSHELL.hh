@@ -4,17 +4,11 @@
 class DBSHELL
 {
 public:
+    
     DBSHELL(/* args */);
     ~DBSHELL();
 };
 
-DBSHELL::DBSHELL(/* args */)
-{
-}
-
-DBSHELL::~DBSHELL()
-{
-}
 
 
 #endif

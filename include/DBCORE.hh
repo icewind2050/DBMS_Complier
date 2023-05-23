@@ -41,6 +41,8 @@ private:
 public:
     Table();
     Table(const vector<vector<recordUnit>>& another);
+
+
     shared_ptr<vector<vector<string,string>>> select(const selectConditions& con);
     bool insert(const vector<recordUnit> & value);
     bool update(const vector<recordUnit> & value);
