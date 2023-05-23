@@ -5,6 +5,7 @@
 #include<vector>
 #include<map>
 #include<memory>
+#include<unordered_map>
 using std::shared_ptr;
 using std::string;
 using std::vector;
@@ -12,6 +13,7 @@ using std::map;
 
 enum TYPE{STRING,INT,FLOAT};
 enum OP{GREAT,LESS,EQUAL,NOEQUAL};
+
 struct selectCondition
 {   
     TYPE datatype;
@@ -19,6 +21,10 @@ struct selectCondition
     string value;
 };
 
+struct selectConditions
+{
+    map<string,selectCondition> con;
+}
 
 struct recordUnit
 {
@@ -33,13 +39,25 @@ class Table
 private:
     vector<vector<recordUnit>> table;
 public:
-    Table(/* args */);
-    shared_ptr<vector<vector<string,string>>> select(const map<string,selectCondition>& con);
+    Table();
+    Table(const vector<vector<recordUnit>>& another);
+    shared_ptr<vector<vector<string,string>>> select(const selectConditions& con);
     bool insert(const vector<recordUnit> & value);
     bool update(const vector<recordUnit> & value);
-    bool 
+    bool deleteSQL(const map<string,selectCondition>& con);
 
     ~Table();
+};
+
+class DataBase
+{
+private:
+    string name;
+    unordered_map<string,Table> Tables;
+public:
+    DataBase();
+    DataBase(string n);
+    ~DataBase();
 };
 
 
