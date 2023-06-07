@@ -3,7 +3,7 @@
     int yylex(void);
     #include<string.h>
     #include"sql.tab.hh"
-    int line =1;
+    int yyline =1;
 %}
 
 CREATE CREATE|create
@@ -29,7 +29,9 @@ UPDATE UPDATE|update
 SET SET|set
 ID [a-zA-Z][a-zA-Z_0-9]*
 NUMBER [-+]?[0-9][0-9]*
-STRING '.*'
+STRING '\'[^\']*\''
+NUMBERFLOAT -?(([0-9]*\.[0-9]+)([Ee][+-]?[0-9]+)?)
+NAME [a-zA-Z][a-zA-Z0-9_]*
 
 %%
 {CHAR} {yylval.typeval = CHAR; return CHAR; }
@@ -60,17 +62,22 @@ STRING '.*'
 {SET} {return SET;}
 
 {ID} { yylval.chval = strdup(yytext); return ID;}
-{NUMBER} {yylval.intval = atoi(yytext); return NUMBER;}
+{NUMBER} {yylval.intval = atoi(yytext); return INT;}
+{NUMBERFLOAT} {yylval.val_float = atof(yytext); return FLOAT;}
+{NAME}    {yylval.val_string = strdup(yytext); return ID;}
+
 "("  { return LEFT_PARENTHESIS; }
 ")"  { return RIGHT_PARENTHESIS; }
 ";"  { return SEMICOLON; }
 ","  { return COMMA; }
 "*"  { return STAR; }
 "."  { return DOT; }
-"<"  { return GREATER_THAN; }
-">"  { return LESS_THAN; }
+"<"  { return LESS_THAN; }
+">"  { return GREATER_THAN; }
+"<=" { return NOT_GREATER_THAN}
+">=" { return NOT_LESS_THAN}
 "="  { return EQUAL; }
-"!"  { return EXCLA; }
+"!="  { return NOT_EQUAL; }
 
 \n   { line++; }
 {STRING} {*(yytext+strlen(yytext)-1) = '\0'; yylval.chval = strdup(yytext+1);  return STRING;}
