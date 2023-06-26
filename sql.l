@@ -2,7 +2,7 @@
     #include"sql.h"
     int yywrap(void);
     int yylex(void);
-    #include"sql.tab.h"
+    #include"parse.tab.h"
     int yyline =1;
 %}
 
