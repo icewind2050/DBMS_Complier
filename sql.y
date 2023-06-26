@@ -1,13 +1,9 @@
 %{
-    
-    int yylex(void);
-    void yyerror(char *s){
-        printf("ERROR '%s'\n",s);
-    }
-    #include<stdio.h>
-    #include"include/DBCORE.hh"
-    #include"include/DBSHELL.hh"
-    
+#include "sql.h"
+extern int yylex(void);
+extern char* yytext;
+int yyerror(char* msg);
+
 %}
 %union{
     int val_int;
@@ -97,22 +93,23 @@ statement: createSQL    //建表语句
          | insertSQL    //插入语句
          | updateSQL    //更新语句
          | deleteSQL    //删除
+         | showSQL      //查看表的数目
          | dropSQL      //删掉整个表
          | DBSQL        //数据库操作
          ;
 
-createSQL:CREATE TABLE table LEFT_PARENTHESIS colume_defination_list RIGHT_PARENTHESIS SEMICOLON{
+createSQL:CREATE TABLE ID LEFT_PARENTHESIS columes_defination_list RIGHT_PARENTHESIS SEMICOLON{
             createTable($3,$5);
             printf("SQL>>");
          }
          ;
 
-columes_defination_list:colume_defination{
+columes_defination_list:columes_defination{
                             $$ = (struct Colume_Defination_List*)malloc(sizeof(struct Colume_Defination_List));
                             $$->colume_defination = $1;
                             $$->next_colume_defination = NULL;
                         }
-                       |columes_defination_list COMMA colume_defination{
+                       |columes_defination_list COMMA columes_defination{
                             $$ = $1;
                             struct Colume_Defination_List* sp = $$;
                             while(sp->next_colume_defination != NULL)
@@ -123,14 +120,14 @@ columes_defination_list:colume_defination{
                        }
                        ;
 
-columes_defination:ID colume_defination_type{
+columes_defination:ID columes_defination_type{
                         $$ = (struct Colume_Defination*)malloc(sizeof(struct Colume_Defination));
                         strcpy($$->name_ID,$1);
                         $$->colume_defination_type= $2;
                    }
                    ;
 
-colume_defination_type:INT
+columes_defination_type:INT
                       {
                         $$ = (struct Colume_Defination_Type*)malloc(sizeof(struct Colume_Defination_Type));
                         $$->type_colume = enum_INT;
@@ -145,29 +142,28 @@ colume_defination_type:INT
                       }
                       ;
 
-table:ID;
-insertSQL:INSERT INTO table LEFT_PARENTHESIS colume_list RIGHT_PARENTHESIS VALUES LEFT_PARENTHESIS columes_value_list RIGHT_PARENTHESIS SEMICOLON{
+insertSQL:INSERT INTO ID LEFT_PARENTHESIS columes_list RIGHT_PARENTHESIS VALUES LEFT_PARENTHESIS columes_value_list RIGHT_PARENTHESIS SEMICOLON{
             insertTable($3,$5,$9);
             printf("SQL>>");
          }
-         |INSERT INTO table VALUES LEFT_PARENTHESIS columes_value_list RIGHT_PARENTHESIS SEMICOLON{
+         |INSERT INTO ID VALUES LEFT_PARENTHESIS columes_value_list RIGHT_PARENTHESIS SEMICOLON{
             insertTable($3,NULL,$6);
             printf("SQL>>");
          }
 
-colume_list:STAR{
+columes_list:STAR{
                 $$ = (struct Colume_List*)malloc(sizeof(struct Colume_List));
                 $$->type = enum_XING;
                 strcpy($$->name_ID,"*");
-                $$->next_Colume_List = NULL
+                $$->next_Colume_List = NULL;
            }
-           |colume{
+           |ID{
                 $$ = (struct Colume_List*)malloc(sizeof(struct Colume_List));
                 $$->type = enum_STRING;
                 strcpy($$->name_ID,$1);
                 $$->next_Colume_List = NULL;
            }
-           |colume_list COMMA colume{
+           |columes_list COMMA ID{
                 $$ = $1;
                 struct Colume_List* sp = $$;
                 while(sp->next_Colume_List!=NULL){
@@ -178,16 +174,16 @@ colume_list:STAR{
                 strcpy(sp->next_Colume_List->name_ID,$3);
                 sp->next_Colume_List->next_Colume_List = NULL;
            }
-           |LEFT_PARENTHESIS colume_list RIGHT_PARENTHESIS %prec UNINUM{
+           |LEFT_PARENTHESIS columes_list RIGHT_PARENTHESIS %prec UNINUMS{
             $$ = $2;
            }
            ;
 
-colume:ID;
-columes_value_list: colume_value{
+
+columes_value_list: columes_value{
                         $$ = $1;
                     }
-                  | columes_value_list COMMA colume_value{
+                  | columes_value_list COMMA columes_value{
                         $$ = $1;
                         struct Colume_Value_List* sp = $$;
                         while(sp->next_Colume_Value_List != NULL)
@@ -198,7 +194,7 @@ columes_value_list: colume_value{
                     }
                     ;
 
-colume_value:   STRING{
+columes_value:   STRING{
                     $$ = (struct Colume_Value_List*)malloc(sizeof(struct Colume_Value_List));
                     $$->type = enum_STRING;
                     strcpy($$->colume_value.Colume_Value_string,$1);
@@ -219,11 +215,11 @@ colume_value:   STRING{
             ;
 
 
-selectSQL:SELECT colume_list FROM ID_list SEMICOLON{
+selectSQL:SELECT columes_list FROM ID_list SEMICOLON{
             selectTableWithNoChoice($2,$4);
             printf("SQL>>");
          }
-         |SELECT colume_list FROM ID_list WHERE option_choices SEMICOLON{
+         |SELECT columes_list FROM ID_list WHERE option_choices SEMICOLON{
             selectTableWithChoice($2,$4,$6);
             printf("SQL>>");
          }
@@ -272,42 +268,42 @@ option_choices: choice{
                         sp = sp->next_Option_Choices;
                     }
                     sp->LinkType = enum_OR;
-                    sp->next_Option_Choices = $3
+                    sp->next_Option_Choices = $3;
                 }
                 ;
 
 
-choice: colume LESS_THAN colume_value{
+choice: ID LESS_THAN columes_value{
             $$ = (struct Choice*)malloc(sizeof(struct Choice));
             strcpy($$->name_ID,$1);
             $$->optype = enum_Less;
             $$->choice_colume_value_list = $3;
         }
-        |colume GREATER_THAN colume_value{
+        |ID GREATER_THAN columes_value{
             $$ = (struct Choice*)malloc(sizeof(struct Choice));
             strcpy($$->name_ID,$1);
             $$->optype = enum_Bigger;
             $$->choice_colume_value_list = $3;
         }
-        |colume EQUAL colume_value{
+        |ID EQUAL columes_value{
             $$ = (struct Choice*)malloc(sizeof(struct Choice));
             strcpy($$->name_ID,$1);
             $$->optype = enum_Equal;
             $$->choice_colume_value_list = $3;
         }
-        |colume NOT_GREATER_THAN colume_value{
+        |ID NOT_GREATER_THAN columes_value{
             $$ = (struct Choice*)malloc(sizeof(struct Choice));
             strcpy($$->name_ID,$1);
             $$->optype = enum_notBigger;
             $$->choice_colume_value_list = $3;
         }
-        |colume NOT_LESS_THAN colume_value{
+        |ID NOT_LESS_THAN columes_value{
             $$ = (struct Choice*)malloc(sizeof(struct Choice));
             strcpy($$->name_ID,$1);
             $$->optype = enum_notLess;
             $$->choice_colume_value_list = $3;
         }
-        |colume NOT_EQUAL colume_value{
+        |ID NOT_EQUAL columes_value{
             $$ = (struct Choice*)malloc(sizeof(struct Choice));
             strcpy($$->name_ID,$1);
             $$->optype = enum_notEqual;
@@ -331,23 +327,23 @@ choices_list:choice{
                 sp->next_Choice->next_Choice = NULL;
             }
             ;
-dropSQL:DROP TABLE table SEMICOLON{
+dropSQL:DROP TABLE ID SEMICOLON{
             dropTable($3);
             printf("SQL>>");
         }
         ;
 
-deleteSQL:DELETE FROM table WHERE option_choices SEMICOLON{
+deleteSQL:DELETE FROM ID WHERE option_choices SEMICOLON{
             deleteTable($3,$5);
             printf("SQL>>");
         }
 
 
-updateSQL:UPDATE table SET choices_list SEMICOLON{
+updateSQL:UPDATE ID SET choices_list SEMICOLON{
             updateTableALL($2,$4);
             printf("SQL>>");
         }
-        | UPDATE table SET choices_list WHERE option_choices SEMICOLON{
+        | UPDATE ID SET choices_list WHERE option_choices SEMICOLON{
             updateTable($2,$4,$6);
             printf("SQL>>");
         }
@@ -359,13 +355,11 @@ showSQL:SHOW TABLES SEMICOLON{
     }
     ;
 
-DBSQL: CREATE DATABASE database SEMICOLON{createDatabase($3;)}
-     | DROP DATABASE database SEMICOLON{dropDatabase($3)}
-     | DROP TABLE table SEMICOLON{showDatabases($3)}
-     | USE database SEMICOLON{useDatabase($3)}
+DBSQL: CREATE DATABASE ID SEMICOLON{createDatabase($3);}
+     | DROP DATABASE ID SEMICOLON{dropDatabase($3);}
+     | USE ID SEMICOLON{useDatabase($2);}
      ;
-database: ID
-        ;
+
 %%
 int main(){
     printf("\nSQL>");
@@ -374,3 +368,8 @@ int main(){
     }
 }
 
+int yyerror(char* msg)
+{
+    printf("Error: %s at '%s' \n",msg,yytext);
+    printf("SQL>>");
+}

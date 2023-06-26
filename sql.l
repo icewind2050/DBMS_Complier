@@ -1,8 +1,8 @@
 %{
+    #include"sql.h"
     int yywrap(void);
     int yylex(void);
-    #include<string.h>
-    #include"sql.tab.hh"
+    #include"sql.tab.h"
     int yyline =1;
 %}
 
@@ -31,11 +31,11 @@ ID [a-zA-Z][a-zA-Z_0-9]*
 NUMBER [-+]?[0-9][0-9]*
 STRING '\'[^\']*\''
 NUMBERFLOAT -?(([0-9]*\.[0-9]+)([Ee][+-]?[0-9]+)?)
-NAME [a-zA-Z][a-zA-Z0-9_]*
+
 
 %%
-{CHAR} {yylval.typeval = CHAR; return CHAR; }
-{INT} {yylval.typeval = INT; return INT;}
+{CHAR} {return CHAR; }
+{INT} {return INT;}
 
 {CREATE} { return CREATE;}
 {SHOW} {return SHOW; }
@@ -61,10 +61,10 @@ NAME [a-zA-Z][a-zA-Z0-9_]*
 {UPDATE} {return UPDATE;}
 {SET} {return SET;}
 
-{ID} { yylval.chval = strdup(yytext); return ID;}
-{NUMBER} {yylval.intval = atoi(yytext); return INT;}
+{ID} { yylval.val_string = strdup(yytext); return ID;}
+{NUMBER} {yylval.val_int = atoi(yytext); return INT;}
 {NUMBERFLOAT} {yylval.val_float = atof(yytext); return FLOAT;}
-{NAME}    {yylval.val_string = strdup(yytext); return ID;}
+
 
 "("  { return LEFT_PARENTHESIS; }
 ")"  { return RIGHT_PARENTHESIS; }
@@ -74,13 +74,13 @@ NAME [a-zA-Z][a-zA-Z0-9_]*
 "."  { return DOT; }
 "<"  { return LESS_THAN; }
 ">"  { return GREATER_THAN; }
-"<=" { return NOT_GREATER_THAN}
-">=" { return NOT_LESS_THAN}
+"<=" { return NOT_GREATER_THAN;}
+">=" { return NOT_LESS_THAN;}
 "="  { return EQUAL; }
 "!="  { return NOT_EQUAL; }
 
-\n   { line++; }
-{STRING} {*(yytext+strlen(yytext)-1) = '\0'; yylval.chval = strdup(yytext+1);  return STRING;}
+\n   { yyline++; }
+{STRING} {*(yytext+strlen(yytext)-1) = '\0'; yylval.val_string = strdup(yytext+1);  return STRING;}
 [ \t]+                {;}//忽视空白
 "//".*                {;}//跳过注释
 %%

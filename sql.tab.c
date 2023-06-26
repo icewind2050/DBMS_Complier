@@ -75,7 +75,7 @@ extern char* yytext;
 int yyerror(char* msg);
 
 
-#line 79 "y.tab.c"
+#line 79 "sql.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -98,149 +98,7 @@ int yyerror(char* msg);
 #  endif
 # endif
 
-
-/* Debug traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
-#if YYDEBUG
-extern int yydebug;
-#endif
-
-/* Token kinds.  */
-#ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-  enum yytokentype
-  {
-    YYEMPTY = -2,
-    YYEOF = 0,                     /* "end of file"  */
-    YYerror = 256,                 /* error  */
-    YYUNDEF = 257,                 /* "invalid token"  */
-    CREATE = 258,                  /* CREATE  */
-    DATABASE = 259,                /* DATABASE  */
-    SHOW = 260,                    /* SHOW  */
-    DATABASES = 261,               /* DATABASES  */
-    DROP = 262,                    /* DROP  */
-    USE = 263,                     /* USE  */
-    TABLE = 264,                   /* TABLE  */
-    TABLES = 265,                  /* TABLES  */
-    INSERT = 266,                  /* INSERT  */
-    INTO = 267,                    /* INTO  */
-    VALUES = 268,                  /* VALUES  */
-    SELECT = 269,                  /* SELECT  */
-    FROM = 270,                    /* FROM  */
-    WHERE = 271,                   /* WHERE  */
-    UPDATE = 272,                  /* UPDATE  */
-    SET = 273,                     /* SET  */
-    CHAR = 274,                    /* CHAR  */
-    DELETE = 275,                  /* DELETE  */
-    LEFT_PARENTHESIS = 276,        /* LEFT_PARENTHESIS  */
-    RIGHT_PARENTHESIS = 277,       /* RIGHT_PARENTHESIS  */
-    SEMICOLON = 278,               /* SEMICOLON  */
-    COMMA = 279,                   /* COMMA  */
-    STAR = 280,                    /* STAR  */
-    DOT = 281,                     /* DOT  */
-    GREATER_THAN = 282,            /* GREATER_THAN  */
-    LESS_THAN = 283,               /* LESS_THAN  */
-    NOT_LESS_THAN = 284,           /* NOT_LESS_THAN  */
-    NOT_GREATER_THAN = 285,        /* NOT_GREATER_THAN  */
-    EQUAL = 286,                   /* EQUAL  */
-    NOT_EQUAL = 287,               /* NOT_EQUAL  */
-    INT = 288,                     /* INT  */
-    FLOAT = 289,                   /* FLOAT  */
-    STRING = 290,                  /* STRING  */
-    ID = 291,                      /* ID  */
-    OR = 292,                      /* OR  */
-    AND = 293,                     /* AND  */
-    UNINUMS = 294                  /* UNINUMS  */
-  };
-  typedef enum yytokentype yytoken_kind_t;
-#endif
-/* Token kinds.  */
-#define YYEMPTY -2
-#define YYEOF 0
-#define YYerror 256
-#define YYUNDEF 257
-#define CREATE 258
-#define DATABASE 259
-#define SHOW 260
-#define DATABASES 261
-#define DROP 262
-#define USE 263
-#define TABLE 264
-#define TABLES 265
-#define INSERT 266
-#define INTO 267
-#define VALUES 268
-#define SELECT 269
-#define FROM 270
-#define WHERE 271
-#define UPDATE 272
-#define SET 273
-#define CHAR 274
-#define DELETE 275
-#define LEFT_PARENTHESIS 276
-#define RIGHT_PARENTHESIS 277
-#define SEMICOLON 278
-#define COMMA 279
-#define STAR 280
-#define DOT 281
-#define GREATER_THAN 282
-#define LESS_THAN 283
-#define NOT_LESS_THAN 284
-#define NOT_GREATER_THAN 285
-#define EQUAL 286
-#define NOT_EQUAL 287
-#define INT 288
-#define FLOAT 289
-#define STRING 290
-#define ID 291
-#define OR 292
-#define AND 293
-#define UNINUMS 294
-
-/* Value type.  */
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-union YYSTYPE
-{
-#line 8 "sql.y"
-
-    int val_int;
-    float val_float;
-    double val_double;
-    char* val_string;
-    enum OpType* val_opType;
-
-    struct Colume_Defination_Type* val_colume_defination_type;
-    struct Colume_Defination* val_colume_defination;
-    struct Colume_Defination_List* val_colume_defination_list;
-
-    union Colume_Value* val_colume_value;
-    struct Colume_Value_List* val_colume_value_list;
-    struct Colume_List* val_colume_list;
-
-    struct Choice* val_choice;
-    struct Option_Choices* val_option_choices;
-
-    struct ID_List* val_ID_list;
-    struct Choice_List* val_choices_list;
-
-#line 229 "y.tab.c"
-
-};
-typedef union YYSTYPE YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
-# define YYSTYPE_IS_DECLARED 1
-#endif
-
-
-extern YYSTYPE yylval;
-
-
-int yyparse (void);
-
-
-
+#include "sql.tab.h"
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -1343,13 +1201,13 @@ yyreduce:
   case 2: /* statements: statements statement  */
 #line 86 "sql.y"
                                  {printf("\nSQL> ");}
-#line 1347 "y.tab.c"
+#line 1205 "sql.tab.c"
     break;
 
   case 3: /* statements: statement  */
 #line 87 "sql.y"
                       {printf("\nSQL> ");}
-#line 1353 "y.tab.c"
+#line 1211 "sql.tab.c"
     break;
 
   case 12: /* createSQL: CREATE TABLE ID LEFT_PARENTHESIS columes_defination_list RIGHT_PARENTHESIS SEMICOLON  */
@@ -1358,7 +1216,7 @@ yyreduce:
             createTable((yyvsp[-4].val_string),(yyvsp[-2].val_colume_defination_list));
             printf("SQL>>");
          }
-#line 1362 "y.tab.c"
+#line 1220 "sql.tab.c"
     break;
 
   case 13: /* columes_defination_list: columes_defination  */
@@ -1368,7 +1226,7 @@ yyreduce:
                             (yyval.val_colume_defination_list)->colume_defination = (yyvsp[0].val_colume_defination);
                             (yyval.val_colume_defination_list)->next_colume_defination = NULL;
                         }
-#line 1372 "y.tab.c"
+#line 1230 "sql.tab.c"
     break;
 
   case 14: /* columes_defination_list: columes_defination_list COMMA columes_defination  */
@@ -1382,7 +1240,7 @@ yyreduce:
                             sp->next_colume_defination->colume_defination = (yyvsp[0].val_colume_defination);
                             sp->next_colume_defination->next_colume_defination = NULL;
                        }
-#line 1386 "y.tab.c"
+#line 1244 "sql.tab.c"
     break;
 
   case 15: /* columes_defination: ID columes_defination_type  */
@@ -1392,7 +1250,7 @@ yyreduce:
                         strcpy((yyval.val_colume_defination)->name_ID,(yyvsp[-1].val_string));
                         (yyval.val_colume_defination)->colume_defination_type= (yyvsp[0].val_colume_defination_type);
                    }
-#line 1396 "y.tab.c"
+#line 1254 "sql.tab.c"
     break;
 
   case 16: /* columes_defination_type: INT  */
@@ -1401,7 +1259,7 @@ yyreduce:
                         (yyval.val_colume_defination_type) = (struct Colume_Defination_Type*)malloc(sizeof(struct Colume_Defination_Type));
                         (yyval.val_colume_defination_type)->type_colume = enum_INT;
                       }
-#line 1405 "y.tab.c"
+#line 1263 "sql.tab.c"
     break;
 
   case 17: /* columes_defination_type: CHAR LEFT_PARENTHESIS INT RIGHT_PARENTHESIS  */
@@ -1410,7 +1268,7 @@ yyreduce:
                         (yyval.val_colume_defination_type) = (struct Colume_Defination_Type*)malloc(sizeof(struct Colume_Defination_Type));
                         (yyval.val_colume_defination_type)->type_colume = enum_STRING; 
                       }
-#line 1414 "y.tab.c"
+#line 1272 "sql.tab.c"
     break;
 
   case 18: /* columes_defination_type: FLOAT  */
@@ -1419,7 +1277,7 @@ yyreduce:
                         (yyval.val_colume_defination_type) = (struct Colume_Defination_Type*)malloc(sizeof(struct Colume_Defination_Type));
                         (yyval.val_colume_defination_type)->type_colume = enum_FLOAT; 
                       }
-#line 1423 "y.tab.c"
+#line 1281 "sql.tab.c"
     break;
 
   case 19: /* insertSQL: INSERT INTO ID LEFT_PARENTHESIS columes_list RIGHT_PARENTHESIS VALUES LEFT_PARENTHESIS columes_value_list RIGHT_PARENTHESIS SEMICOLON  */
@@ -1428,7 +1286,7 @@ yyreduce:
             insertTable((yyvsp[-8].val_string),(yyvsp[-6].val_colume_list),(yyvsp[-2].val_colume_value_list));
             printf("SQL>>");
          }
-#line 1432 "y.tab.c"
+#line 1290 "sql.tab.c"
     break;
 
   case 20: /* insertSQL: INSERT INTO ID VALUES LEFT_PARENTHESIS columes_value_list RIGHT_PARENTHESIS SEMICOLON  */
@@ -1437,7 +1295,7 @@ yyreduce:
             insertTable((yyvsp[-5].val_string),NULL,(yyvsp[-2].val_colume_value_list));
             printf("SQL>>");
          }
-#line 1441 "y.tab.c"
+#line 1299 "sql.tab.c"
     break;
 
   case 21: /* columes_list: STAR  */
@@ -1448,7 +1306,7 @@ yyreduce:
                 strcpy((yyval.val_colume_list)->name_ID,"*");
                 (yyval.val_colume_list)->next_Colume_List = NULL;
            }
-#line 1452 "y.tab.c"
+#line 1310 "sql.tab.c"
     break;
 
   case 22: /* columes_list: ID  */
@@ -1459,7 +1317,7 @@ yyreduce:
                 strcpy((yyval.val_colume_list)->name_ID,(yyvsp[0].val_string));
                 (yyval.val_colume_list)->next_Colume_List = NULL;
            }
-#line 1463 "y.tab.c"
+#line 1321 "sql.tab.c"
     break;
 
   case 23: /* columes_list: columes_list COMMA ID  */
@@ -1475,7 +1333,7 @@ yyreduce:
                 strcpy(sp->next_Colume_List->name_ID,(yyvsp[0].val_string));
                 sp->next_Colume_List->next_Colume_List = NULL;
            }
-#line 1479 "y.tab.c"
+#line 1337 "sql.tab.c"
     break;
 
   case 24: /* columes_list: LEFT_PARENTHESIS columes_list RIGHT_PARENTHESIS  */
@@ -1483,7 +1341,7 @@ yyreduce:
                                                                          {
             (yyval.val_colume_list) = (yyvsp[-1].val_colume_list);
            }
-#line 1487 "y.tab.c"
+#line 1345 "sql.tab.c"
     break;
 
   case 25: /* columes_value_list: columes_value  */
@@ -1491,7 +1349,7 @@ yyreduce:
                                  {
                         (yyval.val_colume_value_list) = (yyvsp[0].val_colume_value_list);
                     }
-#line 1495 "y.tab.c"
+#line 1353 "sql.tab.c"
     break;
 
   case 26: /* columes_value_list: columes_value_list COMMA columes_value  */
@@ -1505,7 +1363,7 @@ yyreduce:
                         sp->next_Colume_Value_List = (struct Colume_Value_List*)malloc(sizeof(struct Colume_Value_List));
                         sp->next_Colume_Value_List = (yyvsp[0].val_colume_value_list);
                     }
-#line 1509 "y.tab.c"
+#line 1367 "sql.tab.c"
     break;
 
   case 27: /* columes_value: STRING  */
@@ -1516,7 +1374,7 @@ yyreduce:
                     strcpy((yyval.val_colume_value_list)->colume_value.Colume_Value_string,(yyvsp[0].val_string));
                     (yyval.val_colume_value_list)->next_Colume_Value_List = NULL;
             }
-#line 1520 "y.tab.c"
+#line 1378 "sql.tab.c"
     break;
 
   case 28: /* columes_value: INT  */
@@ -1527,7 +1385,7 @@ yyreduce:
                     (yyval.val_colume_value_list)->colume_value.Colume_Value_int = (yyvsp[0].val_int);
                     (yyval.val_colume_value_list)->next_Colume_Value_List= NULL;
             }
-#line 1531 "y.tab.c"
+#line 1389 "sql.tab.c"
     break;
 
   case 29: /* columes_value: FLOAT  */
@@ -1538,7 +1396,7 @@ yyreduce:
                     (yyval.val_colume_value_list)->colume_value.Colume_Value_float = (yyvsp[0].val_float);
                     (yyval.val_colume_value_list)->next_Colume_Value_List = NULL;
             }
-#line 1542 "y.tab.c"
+#line 1400 "sql.tab.c"
     break;
 
   case 30: /* selectSQL: SELECT columes_list FROM ID_list SEMICOLON  */
@@ -1547,7 +1405,7 @@ yyreduce:
             selectTableWithNoChoice((yyvsp[-3].val_colume_list),(yyvsp[-1].val_ID_list));
             printf("SQL>>");
          }
-#line 1551 "y.tab.c"
+#line 1409 "sql.tab.c"
     break;
 
   case 31: /* selectSQL: SELECT columes_list FROM ID_list WHERE option_choices SEMICOLON  */
@@ -1556,7 +1414,7 @@ yyreduce:
             selectTableWithChoice((yyvsp[-5].val_colume_list),(yyvsp[-3].val_ID_list),(yyvsp[-1].val_option_choices));
             printf("SQL>>");
          }
-#line 1560 "y.tab.c"
+#line 1418 "sql.tab.c"
     break;
 
   case 32: /* ID_list: ID  */
@@ -1566,7 +1424,7 @@ yyreduce:
             strcpy((yyval.val_ID_list)->name_ID,(yyvsp[0].val_string));
             (yyval.val_ID_list)->next_ID = NULL;
         }
-#line 1570 "y.tab.c"
+#line 1428 "sql.tab.c"
     break;
 
   case 33: /* ID_list: ID_list COMMA ID  */
@@ -1583,7 +1441,7 @@ yyreduce:
             strcpy(sp->next_ID->name_ID,(yyvsp[0].val_string));
             sp->next_ID->next_ID = NULL;
         }
-#line 1587 "y.tab.c"
+#line 1445 "sql.tab.c"
     break;
 
   case 34: /* option_choices: choice  */
@@ -1594,7 +1452,7 @@ yyreduce:
                     (yyval.val_option_choices)->LinkType = enum_NO;
                     (yyval.val_option_choices)->next_Option_Choices = NULL; 
                 }
-#line 1598 "y.tab.c"
+#line 1456 "sql.tab.c"
     break;
 
   case 35: /* option_choices: LEFT_PARENTHESIS option_choices RIGHT_PARENTHESIS  */
@@ -1602,7 +1460,7 @@ yyreduce:
                                                                                 {
                     (yyval.val_option_choices) = (yyvsp[-1].val_option_choices);
                 }
-#line 1606 "y.tab.c"
+#line 1464 "sql.tab.c"
     break;
 
   case 36: /* option_choices: option_choices AND option_choices  */
@@ -1616,7 +1474,7 @@ yyreduce:
                     sp->LinkType = enum_AND;
                     sp->next_Option_Choices = (yyvsp[0].val_option_choices);
                 }
-#line 1620 "y.tab.c"
+#line 1478 "sql.tab.c"
     break;
 
   case 37: /* option_choices: option_choices OR option_choices  */
@@ -1630,7 +1488,7 @@ yyreduce:
                     sp->LinkType = enum_OR;
                     sp->next_Option_Choices = (yyvsp[0].val_option_choices);
                 }
-#line 1634 "y.tab.c"
+#line 1492 "sql.tab.c"
     break;
 
   case 38: /* choice: ID LESS_THAN columes_value  */
@@ -1641,7 +1499,7 @@ yyreduce:
             (yyval.val_choice)->optype = enum_Less;
             (yyval.val_choice)->choice_colume_value_list = (yyvsp[0].val_colume_value_list);
         }
-#line 1645 "y.tab.c"
+#line 1503 "sql.tab.c"
     break;
 
   case 39: /* choice: ID GREATER_THAN columes_value  */
@@ -1652,7 +1510,7 @@ yyreduce:
             (yyval.val_choice)->optype = enum_Bigger;
             (yyval.val_choice)->choice_colume_value_list = (yyvsp[0].val_colume_value_list);
         }
-#line 1656 "y.tab.c"
+#line 1514 "sql.tab.c"
     break;
 
   case 40: /* choice: ID EQUAL columes_value  */
@@ -1663,7 +1521,7 @@ yyreduce:
             (yyval.val_choice)->optype = enum_Equal;
             (yyval.val_choice)->choice_colume_value_list = (yyvsp[0].val_colume_value_list);
         }
-#line 1667 "y.tab.c"
+#line 1525 "sql.tab.c"
     break;
 
   case 41: /* choice: ID NOT_GREATER_THAN columes_value  */
@@ -1674,7 +1532,7 @@ yyreduce:
             (yyval.val_choice)->optype = enum_notBigger;
             (yyval.val_choice)->choice_colume_value_list = (yyvsp[0].val_colume_value_list);
         }
-#line 1678 "y.tab.c"
+#line 1536 "sql.tab.c"
     break;
 
   case 42: /* choice: ID NOT_LESS_THAN columes_value  */
@@ -1685,7 +1543,7 @@ yyreduce:
             (yyval.val_choice)->optype = enum_notLess;
             (yyval.val_choice)->choice_colume_value_list = (yyvsp[0].val_colume_value_list);
         }
-#line 1689 "y.tab.c"
+#line 1547 "sql.tab.c"
     break;
 
   case 43: /* choice: ID NOT_EQUAL columes_value  */
@@ -1696,7 +1554,7 @@ yyreduce:
             (yyval.val_choice)->optype = enum_notEqual;
             (yyval.val_choice)->choice_colume_value_list = (yyvsp[0].val_colume_value_list);
         }
-#line 1700 "y.tab.c"
+#line 1558 "sql.tab.c"
     break;
 
   case 44: /* choices_list: choice  */
@@ -1706,7 +1564,7 @@ yyreduce:
                 (yyval.val_choices_list)->choice = (yyvsp[0].val_choice);
                 (yyval.val_choices_list)->next_Choice = NULL;
             }
-#line 1710 "y.tab.c"
+#line 1568 "sql.tab.c"
     break;
 
   case 45: /* choices_list: choices_list COMMA choice  */
@@ -1721,7 +1579,7 @@ yyreduce:
                 sp->next_Choice->choice = (yyvsp[0].val_choice);
                 sp->next_Choice->next_Choice = NULL;
             }
-#line 1725 "y.tab.c"
+#line 1583 "sql.tab.c"
     break;
 
   case 46: /* dropSQL: DROP TABLE ID SEMICOLON  */
@@ -1730,7 +1588,7 @@ yyreduce:
             dropTable((yyvsp[-1].val_string));
             printf("SQL>>");
         }
-#line 1734 "y.tab.c"
+#line 1592 "sql.tab.c"
     break;
 
   case 47: /* deleteSQL: DELETE FROM ID WHERE option_choices SEMICOLON  */
@@ -1739,7 +1597,7 @@ yyreduce:
             deleteTable((yyvsp[-3].val_string),(yyvsp[-1].val_option_choices));
             printf("SQL>>");
         }
-#line 1743 "y.tab.c"
+#line 1601 "sql.tab.c"
     break;
 
   case 48: /* updateSQL: UPDATE ID SET choices_list SEMICOLON  */
@@ -1748,7 +1606,7 @@ yyreduce:
             updateTableALL((yyvsp[-3].val_string),(yyvsp[-1].val_choices_list));
             printf("SQL>>");
         }
-#line 1752 "y.tab.c"
+#line 1610 "sql.tab.c"
     break;
 
   case 49: /* updateSQL: UPDATE ID SET choices_list WHERE option_choices SEMICOLON  */
@@ -1757,7 +1615,7 @@ yyreduce:
             updateTable((yyvsp[-5].val_string),(yyvsp[-3].val_choices_list),(yyvsp[-1].val_option_choices));
             printf("SQL>>");
         }
-#line 1761 "y.tab.c"
+#line 1619 "sql.tab.c"
     break;
 
   case 50: /* showSQL: SHOW TABLES SEMICOLON  */
@@ -1766,29 +1624,29 @@ yyreduce:
         showTables();
         printf("SQL>>");
     }
-#line 1770 "y.tab.c"
+#line 1628 "sql.tab.c"
     break;
 
   case 51: /* DBSQL: CREATE DATABASE ID SEMICOLON  */
 #line 358 "sql.y"
                                    {createDatabase((yyvsp[-1].val_string));}
-#line 1776 "y.tab.c"
+#line 1634 "sql.tab.c"
     break;
 
   case 52: /* DBSQL: DROP DATABASE ID SEMICOLON  */
 #line 359 "sql.y"
                                  {dropDatabase((yyvsp[-1].val_string));}
-#line 1782 "y.tab.c"
+#line 1640 "sql.tab.c"
     break;
 
   case 53: /* DBSQL: USE ID SEMICOLON  */
 #line 360 "sql.y"
                        {useDatabase((yyvsp[-1].val_string));}
-#line 1788 "y.tab.c"
+#line 1646 "sql.tab.c"
     break;
 
 
-#line 1792 "y.tab.c"
+#line 1650 "sql.tab.c"
 
       default: break;
     }
